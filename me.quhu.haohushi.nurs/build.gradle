@@ -1,0 +1,181 @@
+apply plugin: 'android'
+
+dependencies {
+    //  compile fileTree(include: '*.jar', dir: 'libs')
+    //compile project(':libra')
+    // compile 'com.android.support:support-v4:23.1.1'
+    compile(project(':libra')) {
+        exclude module: 'support-v4'
+    }
+    // compile project(':pull_library_frag')
+    compile(project(':pull_library_frag')) {
+        exclude module: 'support-v4'
+    }
+    //compile project(':pull_library_viewpager')
+    compile(project(':pull_library_viewpager')) {
+        exclude module: 'support-v4'
+    }
+    // compile project(':pull_library')
+    compile(project(':pull_library')) {
+        exclude module: 'support-v4'
+    }
+    // compile project(':PicDateView')
+    compile(project(':PicDateView')) {
+        exclude module: 'support-v4'
+    }
+    // compile project(':lib_loading')
+    compile(project(':lib_loading')) {
+        exclude module: 'support-v4'
+    }
+    //compile project(':library_swiplistview')
+    compile(project(':library_swiplistview')) {
+        exclude module: 'support-v4'
+    }
+    // compile project(':library_share')
+    compile(project(':library_share')) {
+        exclude module: 'support-v4'
+    }
+    compile files('libs/android-async-http-1.4.6.jar')
+    /*compile (files('libs/android-async-http-1.4.6.jar')) {
+                                                        exclude module: 'support-v4'
+                                                    }*/
+    compile files('libs/gson-2.2.1.jar')
+    compile files('libs/KJFrameForAndroid_v2.223.jar')
+    compile files('libs/libammsdk.jar')
+    compile files('libs/MobCommons.jar')
+    compile files('libs/MobTools.jar')
+    compile files('libs/pushservice-4.6.2.39.jar')
+    compile files('libs/ShareSDK-Core-2.6.6.jar')
+    compile files('libs/ShareSDK-Wechat-2.6.6.jar')
+    compile files('libs/ShareSDK-Wechat-Core-2.6.6.jar')
+    compile files('libs/ShareSDK-Wechat-Moments-2.6.6.jar')
+    compile files('libs/universal-image-loader-1.9.4-with-sources.jar')
+    compile files('libs/xUtils-2.6.14.jar')
+    compile files('libs/zxing.jar')
+    compile files('libs/android-support-v4.jar')
+    compile files('libs/TalkingData_Analytics_Android_SDK.jar')
+    compile files('libs/alipaySdk-20160120.jar')
+    compile files('libs/libammsdk.jar')
+    compile files('libs/Yuntx_IMLib_v5.2.1r.jar')
+    compile files('libs/umeng-analytics-v5.4.2.jar')
+    compile files('libs/pinyin4j-2.5.0.jar')
+    compile files('libs/locSDK_6.13.jar')
+    compile files('libs/jsoup-1.7.1.jar')
+    compile files('libs/glide-3.6.1.jar')
+    compile files('libs/BaiduLBS_Android.jar')
+}
+
+android {
+
+        lintOptions {
+            checkReleaseBuilds false
+            // Or, if you prefer, you can continue to check for errors in release builds,
+            // but continue the build even when errors are found:
+            abortOnError false
+        }
+
+    signingConfigs {
+        nurse {
+            storeFile file('E:/me_quhu_haohushi_nurse.keystore')
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storePassword 'android'
+        }
+    }
+    buildTypes {
+        release
+                {
+                    signingConfig signingConfigs.nurse
+                    minifyEnabled true
+                    proguardFiles 'proguard.cfg'
+                    // 不显示Log
+//                    buildConfigField "boolean", "LOG_DEBUG", "false"
+//                    //混淆
+                    //Zipalign优化
+//                    zipAlignEnabled true
+                    // 移除无用的resource文件
+//                    shrinkResources true
+                }
+        debug {
+            signingConfig signingConfigs.nurse
+            minifyEnabled true
+            proguardFiles 'proguard.cfg'
+            // 不显示Log
+//            buildConfigField "boolean", "LOG_DEBUG", "false"
+//            zipAlignEnabled true
+            // 移除无用的resource文件
+//            shrinkResources true
+        }
+    }
+
+    productFlavors {
+          localupdate{}
+//        sanliuling{}
+//        baidu {}
+//        aliyun {}
+//        anzhi {}
+//        baidushoujizhushou {}
+//        huawei {}
+//        jifeng {}
+//        leshi {}
+//        lianxiang {}
+//        meizu {}
+//        nduoshichang {}
+//        oppo {}
+//        sougoushoujizhushou {}
+//        uc {}
+//        wandoujia {}
+//        xiaomi {}
+//        yingyongbao {}
+//        yingyonghui {}
+    }
+
+    productFlavors.all { flavor ->
+        flavor.manifestPlaceholders = [TD_CHANNEL_ID_VALUE: name]
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                // 输出apk名称为XXXX_v1.0_2016-01-15_wandoujia.apk
+//                def fileName = "xqhhs_nurs_v${defaultConfig.versionName}_${variant.productFlavors[0].name}.apk"
+                def fileName = "xqhsd_nurs_v1_3_4_${variant.productFlavors[0].name}.apk"
+                output.outputFile = new File(outputFile.parent, fileName)
+            }
+        }
+    }
+    compileSdkVersion 18
+    buildToolsVersion "23.0.1"
+    defaultConfig
+            {
+                multiDexEnabled true
+            }
+    configurations {
+        all*.exclude group: 'com.android.support', module: 'support-v4'
+    }
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs']
+        }
+
+        // Move the tests to tests/java, tests/res, etc...
+        instrumentTest.setRoot('tests')
+
+        // Move the build types to build-types/<type>
+        // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
+        // This moves them out of them default location under src/<type>/... which would
+        // conflict with src/ being used by the main source set.
+        // Adding new build types or product flavors should be accompanied
+        // by a similar customization.
+        debug.setRoot('build-types/debug')
+        release.setRoot('build-types/release')
+    }
+}
