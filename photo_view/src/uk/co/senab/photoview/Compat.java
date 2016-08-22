@@ -25,6 +25,7 @@ import android.view.View;
 public class Compat {
 
     private String tt;//Test
+    private String yy;//
     private static final int SIXTY_FPS_INTERVAL = 1000 / 60;
 
     public static void postOnAnimation(View view, Runnable runnable) {
